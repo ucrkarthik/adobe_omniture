@@ -2,7 +2,7 @@ import os
 from pyspark.sql import SparkSession
 from pyspark.sql.dataframe import DataFrame
 
-from pyspark.sql.functions import split, when, isnan, col
+from pyspark.sql.functions import split, when, regexp_replace, col
 from adobe.omniture.utils.logger import Logger
 from adobe.omniture.utils.arg_parse import ArgParser
 from adobe.omniture.utils.csv import csv_read
@@ -28,15 +28,20 @@ def run_job(spark: SparkSession, logger: Logger, job_args: dict) ->  DataFrame:
         split("product_list", ";")[2].alias("pl_number_of_items"),
         split("product_list", ";")[3].alias("pl_total_revenue"),
         split("product_list", ";")[4].alias("pl_custom_event"),
-        split("product_list", ";")[5].alias("pl_merchandising_evar"))
+        split("product_list", ";")[5].alias("pl_merchandising_evar"),
+        regexp_replace("referrer", "^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?",
+                       "$3").alias("referral_name")
+    ).where("referrer not like '%esshopzilla%'")
 
+    # regexp_replace("referrer", "^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?",
+    #                "$3").alias("referral_name")
 
     # Set empty spaces in a cell to NULL
     for column in raw_df.columns:
         raw_df = raw_df.withColumn(column, when(col(column) == '', None).otherwise(col(column)))
 
     raw_df.printSchema()
-    raw_df.show()
+    raw_df.show(truncate=False)
 
     return raw_df
 

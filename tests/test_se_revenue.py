@@ -1,5 +1,4 @@
 import os
-import sys
 import pytest
 from pyspark.sql import SparkSession
 
@@ -34,4 +33,4 @@ def test_data_transform_train_runjob(spark_session: SparkSession) -> None:
 
     logger.info(f"raw_df: {raw_df.count()}")
 
-    assert raw_df.count() == 21
+    assert raw_df.count() == 4
