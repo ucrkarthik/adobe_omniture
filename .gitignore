@@ -1,0 +1,7 @@
+.idea
+.DS_Store
+derby.log
+log.txt
+.cache/
+metastore_db/
+venv/
