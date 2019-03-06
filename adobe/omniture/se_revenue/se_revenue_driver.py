@@ -33,9 +33,6 @@ def run_job(spark: SparkSession, logger: Logger, job_args: dict) ->  DataFrame:
                        "$3").alias("referral_name")
     ).where("referrer not like '%esshopzilla%'")
 
-    # regexp_replace("referrer", "^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?",
-    #                "$3").alias("referral_name")
-
     # Set empty spaces in a cell to NULL
     for column in raw_df.columns:
         raw_df = raw_df.withColumn(column, when(col(column) == '', None).otherwise(col(column)))
