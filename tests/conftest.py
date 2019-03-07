@@ -32,11 +32,6 @@ def spark_session(request):
     except OSError:
         pass
 
-    try:
-        shutil.rmtree("./models")
-    except OSError:
-        pass
-
     session = SparkSession.builder\
         .appName("pytest-pyspark-local-testing")\
         .master("local")\

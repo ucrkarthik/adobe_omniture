@@ -33,14 +33,14 @@ def test_data_transform_train_runjob(spark_session: SparkSession) -> None:
     :return:
     """
 
+    #Call the se_revenue_driver run method
     raw_df = se_revenue_driver.run_job(spark_session, logger, job_args)
 
-    logger.info(f"raw_df: {raw_df.count()}")
+    raw_df.printSchema()
+    raw_df.show()
 
+    #Store the results locally
     target_path = job_args["target"].replace("DATE", datetime.now().strftime("%Y-%m-%d"))
-
-    logger.info(f"target_path: {target_path}")
-
     raw_df.repartition(1).write.option('header', 'true').mode('overwrite').csv(target_path)
 
     assert raw_df.count() == 3

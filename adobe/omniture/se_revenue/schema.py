@@ -1,7 +1,11 @@
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType, TimestampType
 
 
-def data_schema():
+def data_schema() -> StructType:
+    """
+    Schema used to validate the inbound source file.
+    :return: Return the schema and its column types.
+    """
     schema = StructType([StructField("hit_time_gmt", IntegerType(), nullable=False),
                          StructField("date_time", TimestampType(), nullable=False),
                          StructField("user_agent", StringType(), nullable=False),

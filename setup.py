@@ -1,3 +1,5 @@
+from typing import List
+
 try: # for pip >= 10
     from pip._internal.req import parse_requirements
 except ImportError: # for pip <= 9.0.3
@@ -8,14 +10,19 @@ from setuptools import setup, find_packages
 
 package_name = 'adobe-omniture'
 
+# Get the version value from the VERSION file
 try:
     with open(path.join(getcwd(), 'VERSION')) as version_file:
         version = version_file.read().strip()
 except IOError:
     raise
 
-
-def parse_requirements(file):
+def parse_requirements(file: str)->List[str]:
+    """
+    Parse the requirements file and return a list of packages to install
+    :param file: path to the requirements file.
+    :return: list of
+    """
     with open(file, "r") as fs:
         return [r for r in fs.read().splitlines() if
                 (len(r.strip()) > 0 and not r.strip().startswith("#") and not r.strip().startswith("--"))]

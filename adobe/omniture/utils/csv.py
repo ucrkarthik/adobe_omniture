@@ -8,8 +8,8 @@ def csv_read(sc: SparkSession, schema: StructType, source_path: str):
     it will store that record in the columnNameOfCorruptRecord column.
     :param sc: Instance of a spark session
     :param schema: Schema used to validate the CSV inbound file.
-    :param path: Path to where the CSV file is located.
-    :return: Dataframe containing the results.
+    :param path: Path to where the inbound CSV file.
+    :return: DataFrame containing the results.
     """
     return sc.read.option("header", "true") \
         .option("columnNameOfCorruptRecord", "_corrupt_record") \

@@ -69,6 +69,7 @@ def run_job(spark: SparkSession, logger: Logger, job_args: dict) ->  DataFrame:
     :return:
     """
 
+    print(f"data_schema type: {type(data_schema())}")
     # Create Dataframe from source
     hit_level_df = csv_read(spark, data_schema(), job_args['source']).cache()
 

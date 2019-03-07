@@ -8,8 +8,8 @@ class Logger:
     def get_logger(name: str, level=logging.INFO) -> logging.Logger:
         """
         Creates a YARN loggers instance. The default logger level is INO.
-        :param level:
-        :return:
+        :param level: Specify the logger level used. INFO is default.
+        :return: instance of a logger class
         """
         logger = logging.getLogger(name)
         logger.setLevel(level)
