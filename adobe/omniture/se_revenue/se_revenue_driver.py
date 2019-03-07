@@ -20,7 +20,7 @@ def unpack_product_list(hit_level_df: DataFrame) -> DataFrame:
     :param hit_level_df: DataFrame containing the click data
     :return: Click data eataFrame containing all the columns plus the product list data in its own columns
     """
-    return  hit_level_df.select(
+    return hit_level_df.select(
         '*',
         split("product_list", ";")[0].alias("pl_category"),
         split("product_list", ";")[1].alias("pl_product_name"),
@@ -69,16 +69,15 @@ def run_job(spark: SparkSession, logger: Logger, job_args: dict) ->  DataFrame:
     :return:
     """
 
-    print(f"data_schema type: {type(data_schema())}")
     # Create Dataframe from source
     hit_level_df = csv_read(spark, data_schema(), job_args['source']).cache()
 
-    logger.info(f"Corrupt Recored Received: {hit_level_df.filter(hit_level_df._corrupt_record.isNotNull()).count()}")
+    logger.info(f"Corrupt Recoreds Received: {hit_level_df.filter(hit_level_df._corrupt_record.isNotNull()).count()}")
 
     # Only capture records that are not corrupt
     hit_level_df = hit_level_df.filter(hit_level_df._corrupt_record.isNull()).drop(hit_level_df._corrupt_record)
 
-    logger.info(f"Recored Received: {hit_level_df.count()}")
+    logger.info(f"Records Processed: {hit_level_df.count()}")
 
     # Handle the Product List column
     hit_level_df = unpack_product_list(hit_level_df)

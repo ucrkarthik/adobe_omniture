@@ -23,10 +23,10 @@ job_args = {
     'app_name': 'pytest SE Revenue'}
 
 # Create an instance of Logger
-logger = Logger.get_logger("test_data_transform train")
+logger = Logger.get_logger("test_se_revenue")
 
 
-def test_data_transform_train_runjob(spark_session: SparkSession) -> None:
+def test_se_revenue_pipeline(spark_session: SparkSession) -> None:
     """
     Test the se_revenue_driver run method.
     :param spark_session: Instance of the Spark Session

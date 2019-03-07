@@ -57,16 +57,20 @@ platform darwin -- Python 3.6.5, pytest-3.3.0, py-1.8.0, pluggy-0.6.0 -- /Users/
 cachedir: .cache
 rootdir: /Users/kavenkatesan/dev/adobe_omniture, inifile: setup.cfg
 plugins: mock-1.10.0, cov-2.5.1
-collected 1 item                                                                                                                                                                                                                                             
+collected 3 items                                                                                                                                                                                                                                            
 
-tests/test_se_revenue.py::test_data_transform_train_runjob 2019-03-07 09:54:26 WARN  NativeCodeLoader:62 - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+tests/test_bad_schema.py::test_schema_check 2019-03-07 11:46:53 WARN  NativeCodeLoader:62 - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
 Setting default log level to "WARN".
 To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
-2019-03-07 09:54:31 WARN  ObjectStore:6666 - Version information not found in metastore. hive.metastore.schema.verification is not enabled so recording the schema version 1.2.0
-2019-03-07 09:54:31 WARN  ObjectStore:568 - Failed to get database default, returning NoSuchObjectException
-2019-03-07 09:54:32 WARN  ObjectStore:568 - Failed to get database global_temp, returning NoSuchObjectException
-2019-03-07 09:54:35,116.116 INFO /Users/kavenkatesan/dev/adobe_omniture/adobe/omniture/se_revenue/se_revenue_driver.py se_revenue_driver - run_job: Corrupt Recored Received: 0
-2019-03-07 09:54:35,237.237 INFO /Users/kavenkatesan/dev/adobe_omniture/adobe/omniture/se_revenue/se_revenue_driver.py se_revenue_driver - run_job: Recored Received: 21
+2019-03-07 11:46:58 WARN  ObjectStore:6666 - Version information not found in metastore. hive.metastore.schema.verification is not enabled so recording the schema version 1.2.0
+2019-03-07 11:46:58 WARN  ObjectStore:568 - Failed to get database default, returning NoSuchObjectException
+2019-03-07 11:46:59 WARN  ObjectStore:568 - Failed to get database global_temp, returning NoSuchObjectException
+2019-03-07 11:47:02,139.139 INFO /Users/kavenkatesan/dev/adobe_omniture/tests/test_bad_schema.py test_bad_schema - test_schema_check: Corrupt Recoreds Received: 1
+PASSED                                                                                                                                                                                                     [ 33%]
+tests/test_df_transformer.py::test_unpack_product_list_and_capture_search_keyword PASSED                                                                                                                                                               [ 66%]
+tests/test_se_revenue.py::test_se_revenue_pipeline 2019-03-07 11:47:03 WARN  CacheManager:66 - Asked to cache already cached data.
+2019-03-07 11:47:03,715.715 INFO /Users/kavenkatesan/dev/adobe_omniture/adobe/omniture/se_revenue/se_revenue_driver.py se_revenue_driver - run_job: Corrupt Recoreds Received: 0
+2019-03-07 11:47:03,855.855 INFO /Users/kavenkatesan/dev/adobe_omniture/adobe/omniture/se_revenue/se_revenue_driver.py se_revenue_driver - run_job: Records Processed: 21
 root
  |-- Search Engine Domain: string (nullable = true)
  |-- Search Keyword: string (nullable = true)
@@ -80,9 +84,9 @@ root
 |      www.google.com|          ipod|    190|
 +--------------------+--------------+-------+
 
-PASSED                                                                                                                                                                                      [100%]
+PASSED                                                                                                                                                                                              [100%]
 
-================================================================================================================= 1 passed in 19.96 seconds ==================================================================================================================
+================================================================================================================= 3 passed in 20.59 seconds ==================================================================================================================
 ```
 A target folder with the csv file will also be generated. 
 ```bash
