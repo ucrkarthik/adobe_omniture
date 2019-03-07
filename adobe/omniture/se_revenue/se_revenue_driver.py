@@ -62,11 +62,28 @@ def capture_search_keyword(hit_level_df: DataFrame) -> DataFrame:
 
 def run_job(spark: SparkSession, logger: Logger, job_args: dict) ->  DataFrame:
     """
-    The execution method
-    :param spark: spark session
-    :param logger: logger object to logging
-    :param job_args: Job arguments passed in by spark-submit
-    :return:
+    The run_job method is called by the main method and by the pytest file. It extracts and transforms the
+    the "hit level data" and calculates the how much revenue the client is getting from external Search Engines( such as
+    Google, Yahoo and MSN) and which keywords are performing the best based on revenue.
+    The method will return a dataframe which will have the following schema:
+        root
+          |-- Search Engine Domain: string (nullable = true)
+          |-- Search Keyword: string (nullable = true)
+          |-- Revenue: string (nullable = true)
+
+    Here is an example of the output:
+        +--------------------+--------------+-------+
+        |Search Engine Domain|Search Keyword|Revenue|
+        +--------------------+--------------+-------+
+        |      www.google.com|          Ipod|    290|
+        |        www.bing.com|          Zune|    250|
+        |      www.google.com|          ipod|    190|
+        +--------------------+--------------+-------+
+
+    :param spark: Spark session
+    :param logger: Logger object for logging messages. Default is INFO.
+    :param job_args: Job arguments passed in by spark-submit: source and target path
+    :return: DataFrame containing the results
     """
 
     # Create Dataframe from source
@@ -101,7 +118,8 @@ def run_job(spark: SparkSession, logger: Logger, job_args: dict) ->  DataFrame:
 
 def main(main_args: list) -> None:
     """
-    Search Engine Revenue calculator main methold. It takes
+    Search Engine Revenue calculator main method. It create the session and calls the run_job method to
+    calculate the results. The results are then saved as a CSV file in the target(argument passed in) folder path.
     :param main_args: Contains arguments passed into the spark-submit(source, target, app_name)
     :return: None
     """
@@ -122,6 +140,7 @@ def main(main_args: list) -> None:
         # Run the Datatransform
         search_engin_rev_results_df = run_job(spark, logger, job_args)
 
+        # Replace 'DATE' string in the target path with the current date and save the file as a CSV
         target_path = job_args["target"].replace("DATE", datetime.now().strftime("%Y-%m-%d"))
         search_engin_rev_results_df.repartition(1).write.option('header', 'true').mode('overwrite').csv(target_path)
 
