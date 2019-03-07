@@ -7,3 +7,6 @@ metastore_db/
 venv/
 __pycache__/
 tests/results
+build/
+dist/
+adobe_omniture.egg-info/

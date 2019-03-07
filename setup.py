@@ -31,6 +31,5 @@ setup(name=package_name,
       url='https://github.com/ucrkarthik/adobe_omniture',
       packages=find_packages(exclude=['tests']),
       install_requires=requirements,
-      tests_require=test_requirements,
       include_package_data=True,
       zip_safe=False)

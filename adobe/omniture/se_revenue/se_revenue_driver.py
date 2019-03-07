@@ -14,13 +14,13 @@ from adobe.omniture.utils.csv import csv_read
 from adobe.omniture.utils.logger import Logger
 
 
-def unpack_product_list(click_df: DataFrame) -> DataFrame:
+def unpack_product_list(hit_level_df: DataFrame) -> DataFrame:
     """
     Parse the Product List semicolon separate values into a separate columns
-    :param click_df: DataFrame containing the click data
+    :param hit_level_df: DataFrame containing the click data
     :return: Click data eataFrame containing all the columns plus the product list data in its own columns
     """
-    return  click_df.select(
+    return  hit_level_df.select(
         '*',
         split("product_list", ";")[0].alias("pl_category"),
         split("product_list", ";")[1].alias("pl_product_name"),
@@ -32,10 +32,10 @@ def unpack_product_list(click_df: DataFrame) -> DataFrame:
                        "$3").alias("search_engine_domain")
     )
 
-def capture_search_keyword(click_df: DataFrame) -> DataFrame:
+def capture_search_keyword(hit_level_df: DataFrame) -> DataFrame:
     """
     Locate the search engin keywords in the referrer URL and store it in a new column
-    :param click_df: DataFrame containing the click data
+    :param hit_level_df: DataFrame containing the click data
     :return: Click data eataFrame containing all the columns plus the keyword column
     """
 
@@ -57,7 +57,7 @@ def capture_search_keyword(click_df: DataFrame) -> DataFrame:
 
     # Get the keyword search value stored in the URL parameter
     url_paramater_udf = udf(lambda x: parse_url(x), StringType())
-    return click_df.withColumn("search_keyword", url_paramater_udf(click_df.referrer))
+    return hit_level_df.withColumn("search_keyword", url_paramater_udf(hit_level_df.referrer))
 
 
 def run_job(spark: SparkSession, logger: Logger, job_args: dict) ->  DataFrame:
@@ -70,36 +70,33 @@ def run_job(spark: SparkSession, logger: Logger, job_args: dict) ->  DataFrame:
     """
 
     # Create Dataframe from source
-    raw_df = csv_read(spark, data_schema(), job_args['source']).cache()
+    hit_level_df = csv_read(spark, data_schema(), job_args['source']).cache()
 
-    logger.info(f"Corrupt Recored Received: {raw_df.filter(raw_df._corrupt_record.isNotNull()).count()}")
+    logger.info(f"Corrupt Recored Received: {hit_level_df.filter(hit_level_df._corrupt_record.isNotNull()).count()}")
 
     # Only capture records that are not corrupt
-    raw_df = raw_df.filter(raw_df._corrupt_record.isNull()).drop(raw_df._corrupt_record)
+    hit_level_df = hit_level_df.filter(hit_level_df._corrupt_record.isNull()).drop(hit_level_df._corrupt_record)
 
-    logger.info(f"Recored Received: {raw_df.count()}")
+    logger.info(f"Recored Received: {hit_level_df.count()}")
 
     # Handle the Product List column
-    raw_df = unpack_product_list(raw_df)
+    hit_level_df = unpack_product_list(hit_level_df)
 
     # Parse the keyword used in the referrer URL
-    raw_df = capture_search_keyword(raw_df)
+    hit_level_df = capture_search_keyword(hit_level_df)
 
     # Set empty spaces in a cell to NULL
-    for column in raw_df.columns:
-        raw_df = raw_df.withColumn(column, when(col(column) == '', None).otherwise(col(column)))
+    for column in hit_level_df.columns:
+        hit_level_df = hit_level_df.withColumn(column, when(col(column) == '', None).otherwise(col(column)))
 
     # Use window function to help do operations within the "ip" partition(aka group).
-    window_spec = Window.partitionBy(raw_df["ip"]).orderBy(raw_df["hit_time_gmt"])
-    raw_df = raw_df.select(first("search_engine_domain", ignorenulls=True).over(window_spec).alias("Search Engine Domain"),
+    window_spec = Window.partitionBy(hit_level_df["ip"]).orderBy(hit_level_df["hit_time_gmt"])
+    hit_level_df = hit_level_df.select(first("search_engine_domain", ignorenulls=True).over(window_spec).alias("Search Engine Domain"),
                            first("search_keyword", ignorenulls=True).over(window_spec).alias("Search Keyword"),
                            last("pl_total_revenue", ignorenulls=True).over(window_spec).alias("Revenue"))\
                    .where(col("event_list")==1).orderBy("Revenue", ascending=False)
 
-    raw_df.printSchema()
-    raw_df.show(truncate=False)
-
-    return raw_df
+    return hit_level_df
 
 
 def main(main_args: list) -> None:
@@ -110,20 +107,23 @@ def main(main_args: list) -> None:
     """
     logger = Logger.get_logger(os.path.splitext(os.path.basename(__file__))[0])
 
-    # Use general arg parser list to specify the arguments being passed
-    job_args = ArgParser.general_arg_parser_list().parse_args(main_args)
+    logger.info(f"main_args: {main_args}")
 
-    logger.info("Config Args: {}".format(job_args))
+    # Use general arg parser list to specify the arguments being passed
+    job_args = vars(ArgParser.general_arg_parser_list().parse_args(main_args[1:]))
+
+    logger.info(f"Type job_args: {type(job_args)}")
+    logger.info(f"Job Args: {job_args}")
 
     try:
         # Create a spark session
         spark = SparkSession.builder.appName(job_args["app_name"]).getOrCreate()
 
         # Run the Datatransform
-        raw_df = run_job(spark, logger, job_args)
+        search_engin_rev_results_df = run_job(spark, logger, job_args)
 
         target_path = job_args["target"].replace("DATE", datetime.now().strftime("%Y-%m-%d"))
-        raw_df.repartition(1).write.option('header', 'true').mode('overwrite').csv(target_path)
+        search_engin_rev_results_df.repartition(1).write.option('header', 'true').mode('overwrite').csv(target_path)
 
     except Exception as ex:
 
