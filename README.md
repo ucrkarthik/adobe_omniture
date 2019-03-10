@@ -1,9 +1,23 @@
 ## Getting Started
-This is a PySpark application that helps calculate how much revenue the client is getting from external Search Engines, 
+This is a PySpark application that helps calculate how much revenue the client is getting from external Search Engines,
 such as Google, Yahoo and MSN and which keywords are performing the best based on revenue.
 
+#### Environment Variables
+Verify the SPARK and PYTHON environment variables in the .bash_profile file are up-to-date:
+```bash
+export PYTHON_HOME=/usr/local/Cellar/python/3.7.2_2
+export PATH=$PYTHON_HOME/bin:$PATH
+
+export SPARK_HOME=/Users/karthik/spark-2.3.3-bin-hadoop2.7
+
+export IPYTHON=1
+export PYSPARK_PYTHON=$PYTHON_HOME
+export PYSPARK_DRIVER_PYTHON=$PYTHON_HOME
+export PYSPARK_DRIVER_PYTHON_OPTS="notebook"
+```
+
 #### Environment
-Setup should be performed in a python 3 virtualenv. 
+Setup should be performed in a python 3 virtualenv.
 
 The following command makes the environment:
 ```bash
@@ -12,7 +26,7 @@ python3 -m venv /path/to/new/virtual/environment
 
 After creation, you must activate the environment:
 ```bash
-source /path/to/new/virtual/environment/bin/activate 
+source /path/to/new/virtual/environment/bin/activate
 ```
 
 #### Requirements
@@ -22,19 +36,19 @@ pip install -r requirements.txt
 ```
 
 #### Build
-CD into the adobe_ominiture repo and copy the repo's files into the environment:
+Copy the repo's files into the environment:
 ```bash
-python setup.py install
+python3 setup.py install
 ```
 
 #### Execute
-Run the "Search Engine Revenue" spark job with spark-submit. The 'source' and 'target' path specify the location where the source file is located and the target folder where 
-the results can be stored. The 'target' folder path requires the word 'DATE' in the name, so the system can replace the word('DATE') with the current date(2019-02-07). 
-Here is an example of how to execute the job locally: 
+Run the "Search Engine Revenue" spark job with spark-submit. The 'source' and 'target' path specify the location where the source file is located and the target folder where
+the results can be stored. The 'target' folder path requires the word 'DATE' in the name, so the system can replace the word('DATE') with the current date(2019-02-07).
+Here is an example of how to execute the job locally:
 ```bash
 spark-submit adobe/omniture/se_revenue/se_revenue_driver.py --source "tests/resources/data.sql" --target "tests/results/DATE_SearchKeywordPerformance.tab"
 ```
-The results of the run will stored in the target folder path as a CSV file . The CSV file will have the following file name prefix(and a csv extension): part-00000-*.csv 
+The results of the run will stored in the target folder path as a CSV file . The CSV file will have the following file name prefix(and a csv extension): part-00000-*.csv
 ```bash
 C02VC1CAHTDD: kavenkatesan$ pwd
 /Users/kavenkatesan/dev/adobe_omniture/tests/results/2019-03-07_SearchKeywordPerformance.tab
@@ -88,7 +102,7 @@ PASSED                                                                          
 
 ================================================================================================================= 3 passed in 20.59 seconds ==================================================================================================================
 ```
-A target folder with the csv file will also be generated. 
+A target folder with the csv file will also be generated.
 ```bash
 C02VC1CAHTDD: kavenkatesan$ pwd
 /Users/kavenkatesan/dev/adobe_omniture/tests/results/2019-03-07_SearchKeywordPerformance.tab
