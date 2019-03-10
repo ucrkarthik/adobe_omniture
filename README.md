@@ -115,3 +115,28 @@ total 8
 ```
 
 Note that Python3, Java 8 & Spark 2.3.3 must be installed for `pytest` to run Spark: some unit tests use Spark.
+
+
+
+#### AWS-EMR (Work in Progress)
+The instructions below are to help deploy the artifact in the AWS EMR cluster. The best approach for deploying a python 
+application in AWS EMR will be to pull the artifact from an artifact repository during the cluster bootstrap. Since we 
+dont have access to an artifact repository, the artifact file and the bootstrap script file will be stored in S3. During the 
+cluster creationg, bootstrap execution will pull the artifact from S3 and install it in all the nodes on the cluster. 
+ 
+Run the following command to create the project archive file in a tar.gz file. 
+```bash
+python3 setup.py sdist
+```
+Use the aws-cli command to copy the bootstrap script and project archive file to a location in S3.
+```bash
+aws s3 cp aws_emr/bootstrap.sh s3://adobeomniture/bootstrap.sh
+aws s3 cp dist/adobe-omniture-1.0.0.tar.gz s3://adobeomniture/adobe-omniture-1.0.0.tar.gz
+```
+Change directory to aws_emr folder and run the aws_emr_script python script to create the cluster and submit the step: 
+```bash
+cd aws_emr
+python3 aws_emr_script.py
+```
+
+

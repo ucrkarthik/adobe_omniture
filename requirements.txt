@@ -13,3 +13,7 @@ pytest      #==3.3.0
 pytest-cov  #==2.5.1
 pytest-mock #==1.10.0
 testtools   #==2.3.0
+
+# AWS
+boto3       #==1.9.111
+
