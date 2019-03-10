@@ -112,4 +112,4 @@ total 8
 -rw-r--r--  1 kavenkatesan  staff  114 Mar  7 09:36 part-00000-93e65a6d-6eb3-4f1e-9e63-79420e50c688-c000.csv
 ```
 
-Note that Java 8 & Spark 2.2.1 must be installed for `pytest` to run Spark: some unit tests use Spark.
+Note that Python3, Java 8 & Spark 2.3.3 must be installed for `pytest` to run Spark: some unit tests use Spark.
