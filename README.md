@@ -14,6 +14,8 @@ export IPYTHON=1
 export PYSPARK_PYTHON=$PYTHON_HOME
 export PYSPARK_DRIVER_PYTHON=$PYTHON_HOME
 export PYSPARK_DRIVER_PYTHON_OPTS="notebook"
+
+PYTHONPATH=$SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.7-src.zip
 ```
 
 #### Environment
