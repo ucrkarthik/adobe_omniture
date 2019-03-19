@@ -50,7 +50,7 @@ Here is an example of how to execute the job locally:
 ```bash
 spark-submit adobe/omniture/se_revenue/se_revenue_driver.py --source "tests/resources/data.sql" --target "tests/results/"
 ```
-The results of the run will stored in the target folder path as a CSV file . The CSV file will have the following file name prefix(and a csv extension): part-00000-*.csv
+The results of the run will be stored in the target folder path as a excel file . The excel file will have the following file name prefix(and a xlsx extension): <DATE>_SearchKeywordPerformance.xlsx
 ```bash
 (venv) C02VC1CAHTDD:results kavenkatesan$ pwd
 /Users/kavenkatesan/dev/adobe_omniture/tests/results
