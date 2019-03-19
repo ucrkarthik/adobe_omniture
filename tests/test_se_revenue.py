@@ -5,6 +5,7 @@ import pytest
 from pyspark.sql import SparkSession
 
 from adobe.omniture.se_revenue import se_revenue_driver
+from adobe.omniture.utils.excel import create_excel_spreadsheet
 from adobe.omniture.utils.logger import Logger
 
 # This allows using the fixture in all tests in this module
@@ -15,7 +16,7 @@ dir_name, filename = os.path.split(os.path.abspath(__file__))
 
 # Update test config args
 source_data = os.path.join(dir_name, 'resources/data.sql')
-target_data = os.path.join(dir_name, 'results/DATE_SearchKeywordPerformance.tab')
+target_data = os.path.join(dir_name, 'results')
 
 job_args = {
     'source': source_data,
@@ -39,8 +40,11 @@ def test_se_revenue_pipeline(spark_session: SparkSession) -> None:
     raw_df.printSchema()
     raw_df.show()
 
+    # List to store tuples containing the excel sheet name and pandas df
+    pandas_df_list = []
+    pandas_df_list.append(("Search Engin Rev Results", raw_df.toPandas()))
+
     #Store the results locally
-    target_path = job_args["target"].replace("DATE", datetime.now().strftime("%Y-%m-%d"))
-    raw_df.repartition(1).write.option('header', 'true').mode('overwrite').csv(target_path)
+    create_excel_spreadsheet(pandas_df_list, job_args['target'])
 
     assert raw_df.count() == 3

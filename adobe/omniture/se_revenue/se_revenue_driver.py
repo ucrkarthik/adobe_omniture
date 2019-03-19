@@ -11,8 +11,8 @@ from pyspark.sql.window import Window
 from adobe.omniture.se_revenue.schema import data_schema
 from adobe.omniture.utils.arg_parse import ArgParser
 from adobe.omniture.utils.csv import csv_read
+from adobe.omniture.utils.excel import create_excel_spreadsheet
 from adobe.omniture.utils.logger import Logger
-
 
 def unpack_product_list(hit_level_df: DataFrame) -> DataFrame:
     """
@@ -140,9 +140,11 @@ def main(main_args: list) -> None:
         # Run the Datatransform
         search_engin_rev_results_df = run_job(spark, logger, job_args)
 
-        # Replace 'DATE' string in the target path with the current date and save the file as a CSV
-        target_path = job_args["target"].replace("DATE", datetime.now().strftime("%Y-%m-%d"))
-        search_engin_rev_results_df.repartition(1).write.option('header', 'true').mode('overwrite').csv(target_path)
+        # List to store tuples containing the excel sheet name and pandas df
+        pandas_df_list = []
+        pandas_df_list.append(("Search Engin Rev Results", search_engin_rev_results_df.toPandas()))
+
+        create_excel_spreadsheet(pandas_df_list, job_args['target'])
 
     except Exception as ex:
 

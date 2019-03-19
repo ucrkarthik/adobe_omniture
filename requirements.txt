@@ -5,6 +5,9 @@ pyspark==2.3.3
 py4j==0.10.7
 pyyaml==3.12
 
+#Pandas
+pandas>=0.22.0
+
 # For Test
 findspark   #==1.3.0
 mock        #==2.0.0
