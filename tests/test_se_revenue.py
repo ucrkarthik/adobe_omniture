@@ -39,11 +39,8 @@ def test_se_revenue_pipeline(spark_session: SparkSession) -> None:
     raw_df.printSchema()
     raw_df.show()
 
-    # List to store tuples containing the excel sheet name and pandas df
-    pandas_df_list = []
-    pandas_df_list.append(("Search Engin Rev Results", raw_df.toPandas()))
-
-    #Store the results locally
-    se_revenue_driver.create_excel_spreadsheet(pandas_df_list, job_args['target'])
+    # Store the file in a tsv format
+    raw_df.toPandas().to_csv(
+        job_args['target'] + "/" + datetime.now().strftime("%Y-%m-%d") + '_SearchKeywordPerformance.tsv', sep="\t")
 
     assert raw_df.count() == 3
