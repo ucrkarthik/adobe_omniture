@@ -163,11 +163,13 @@ def main(main_args: list) -> None:
         # Run the Datatransform
         search_engin_rev_results_df = run_job(spark, logger, job_args)
 
-        # List to store tuples containing the excel sheet name and pandas df
-        pandas_df_list = []
-        pandas_df_list.append(("Search Engin Rev Results", search_engin_rev_results_df.toPandas()))
+        # Store the file in a tsv format
+        search_engin_rev_results_df.toPandas().to_csv(job_args['target']+"/"+ datetime.now().strftime("%Y-%m-%d") + '_SearchKeywordPerformance.tsv', sep="\t")
 
-        create_excel_spreadsheet(pandas_df_list, job_args['target'])
+        # Example of how to store it in a excel file
+        #pandas_df_list = []
+        #pandas_df_list.append(("Search Engin Rev Results", search_engin_rev_results_df.toPandas()))
+        #create_excel_spreadsheet(pandas_df_list, job_args['target'])
 
     except Exception as ex:
 

@@ -45,19 +45,18 @@ python3 setup.py install
 
 #### Execute
 Run the "Search Engine Revenue" spark job with spark-submit. The 'source' and 'target' path specify the location where the source file is located and the target folder where
-the excel file will be stored.
+the tsv file will be stored.
 Here is an example of how to execute the job locally:
 ```bash
 spark-submit adobe/omniture/se_revenue/se_revenue_driver.py --source "tests/resources/data.sql" --target "tests/results/"
 ```
 The results of the run will stored in the target folder path as a CSV file . The CSV file will have the following file name prefix(and a csv extension): part-00000-*.csv
 ```bash
-C02VC1CAHTDD: kavenkatesan$ pwd
-/Users/kavenkatesan/dev/adobe_omniture/tests/results/2019-03-07_SearchKeywordPerformance.tab
-C02VC1CAHTDD: kavenkatesan$ ls -l
+(venv) C02VC1CAHTDD:results kavenkatesan$ pwd
+/Users/kavenkatesan/dev/adobe_omniture/tests/results
+(venv) C02VC1CAHTDD:results kavenkatesan$ ls -l
 total 8
--rw-r--r--  1 kavenkatesan  staff    0 Mar  7 09:36 _SUCCESS
--rw-r--r--  1 kavenkatesan  staff  114 Mar  7 09:36 part-00000-93e65a6d-6eb3-4f1e-9e63-79420e50c688-c000.csv
+-rw-r--r--  1 kavenkatesan  staff  121 Mar 19 08:31 2019-03-19_SearchKeywordPerformance.tsv
 ```
 
 #### Pytest
@@ -104,14 +103,13 @@ PASSED                                                                          
 
 ================================================================================================================= 3 passed in 20.59 seconds ==================================================================================================================
 ```
-A target folder with the csv file will also be generated.
+A target folder with the tsv file will also be generated.
 ```bash
-C02VC1CAHTDD: kavenkatesan$ pwd
-/Users/kavenkatesan/dev/adobe_omniture/tests/results/2019-03-07_SearchKeywordPerformance.tab
-C02VC1CAHTDD: kavenkatesan$ ls -l
+(venv) C02VC1CAHTDD:results kavenkatesan$ pwd
+/Users/kavenkatesan/dev/adobe_omniture/tests/results
+(venv) C02VC1CAHTDD:results kavenkatesan$ ls -l
 total 8
--rw-r--r--  1 kavenkatesan  staff    0 Mar  7 09:36 _SUCCESS
--rw-r--r--  1 kavenkatesan  staff  114 Mar  7 09:36 part-00000-93e65a6d-6eb3-4f1e-9e63-79420e50c688-c000.csv
+-rw-r--r--  1 kavenkatesan  staff  121 Mar 19 08:31 2019-03-19_SearchKeywordPerformance.tsv
 ```
 
 Note that Python3, Java 8 & Spark 2.3.3 must be installed for `pytest` to run Spark: some unit tests use Spark.
