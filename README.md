@@ -50,14 +50,13 @@ Here is an example of how to execute the job locally:
 ```bash
 spark-submit adobe/omniture/se_revenue/se_revenue_driver.py --source "tests/resources/data.sql" --target "tests/results/"
 ```
-The results of the run will stored in the target folder path as a CSV file . The CSV file will have the following file name prefix(and a csv extension): part-00000-*.csv
+The results of the run will be stored in the target folder path as a excel file . The excel file will have the following file name prefix(and a xlsx extension): <DATE>_SearchKeywordPerformance.xlsx
 ```bash
 C02VC1CAHTDD: kavenkatesan$ pwd
-/Users/kavenkatesan/dev/adobe_omniture/tests/results/2019-03-07_SearchKeywordPerformance.tab
+/Users/karthik/dev/adobe_omniture/tests/results
 C02VC1CAHTDD: kavenkatesan$ ls -l
-total 8
--rw-r--r--  1 kavenkatesan  staff    0 Mar  7 09:36 _SUCCESS
--rw-r--r--  1 kavenkatesan  staff  114 Mar  7 09:36 part-00000-93e65a6d-6eb3-4f1e-9e63-79420e50c688-c000.csv
+total 16
+-rw-r--r--@ 1 karthik  staff  5557 Mar 19 00:09 2019-03-19_SearchKeywordPerformance.xlsx
 ```
 
 #### Pytest
@@ -104,14 +103,13 @@ PASSED                                                                          
 
 ================================================================================================================= 3 passed in 20.59 seconds ==================================================================================================================
 ```
-A target folder with the csv file will also be generated.
+A target folder with the excel file will also be generated.
 ```bash
 C02VC1CAHTDD: kavenkatesan$ pwd
-/Users/kavenkatesan/dev/adobe_omniture/tests/results/2019-03-07_SearchKeywordPerformance.tab
+/Users/karthik/dev/adobe_omniture/tests/results
 C02VC1CAHTDD: kavenkatesan$ ls -l
-total 8
--rw-r--r--  1 kavenkatesan  staff    0 Mar  7 09:36 _SUCCESS
--rw-r--r--  1 kavenkatesan  staff  114 Mar  7 09:36 part-00000-93e65a6d-6eb3-4f1e-9e63-79420e50c688-c000.csv
+total 16
+-rw-r--r--@ 1 karthik  staff  5557 Mar 19 00:09 2019-03-19_SearchKeywordPerformance.xlsx
 ```
 
 Note that Python3, Java 8 & Spark 2.3.3 must be installed for `pytest` to run Spark: some unit tests use Spark.
