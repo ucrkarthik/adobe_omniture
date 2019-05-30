@@ -5,14 +5,9 @@ such as Google, Yahoo and MSN and which keywords are performing the best based o
 #### Environment Variables
 Verify the SPARK and PYTHON environment variables in the .bash_profile file are up-to-date:
 ```bash
-export PYTHON_HOME=/usr/local/Cellar/python/3.7.2_2
-export PATH=$PYTHON_HOME/bin:$PATH
-
 export SPARK_HOME=/Users/karthik/spark-2.3.3-bin-hadoop2.7
 
 export IPYTHON=1
-export PYSPARK_PYTHON=$PYTHON_HOME
-export PYSPARK_DRIVER_PYTHON=$PYTHON_HOME
 export PYSPARK_DRIVER_PYTHON_OPTS="notebook"
 
 PYTHONPATH=$SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.7-src.zip
@@ -48,7 +43,7 @@ Run the "Search Engine Revenue" spark job with spark-submit. The 'source' and 't
 the tsv file will be stored.
 Here is an example of how to execute the job locally:
 ```bash
-spark-submit adobe/omniture/se_revenue/se_revenue_driver.py --source "tests/resources/data.sql" --target "tests/results/"
+spark-submit adobe/omniture/se_revenue/se_revenue_driver.py --source "tests/resources/data.sql" --target "tests/results"
 ```
 The results of the run will be stored in the target folder path as a excel file . The excel file will have the following file name prefix(and a xlsx extension): <DATE>_SearchKeywordPerformance.xlsx
 ```bash

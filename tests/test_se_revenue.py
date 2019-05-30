@@ -15,7 +15,7 @@ dir_name, filename = os.path.split(os.path.abspath(__file__))
 
 # Update test config args
 source_data = os.path.join(dir_name, 'resources/data.sql')
-target_data = os.path.join(dir_name, 'results/')
+target_data = os.path.join(dir_name, 'results')
 
 job_args = {
     'source': source_data,
