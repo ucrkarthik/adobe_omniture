@@ -3,7 +3,7 @@ pyspark==2.3.3
 
 # Python
 py4j==0.10.7
-pyyaml==3.12
+pyyaml==5.1
 
 #Pandas
 pandas>=0.22.0
